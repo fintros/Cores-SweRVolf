@@ -23,6 +23,11 @@ set_property -dict { PACKAGE_PIN K18   IOSTANDARD LVCMOS33 } [get_ports i_flash_
 #set_property -dict { PACKAGE_PIN M14   IOSTANDARD LVCMOS33 } [get_ports { QSPI_DQ[3] }]; #IO_L2N_T0_D03_14 Sch=qspi_dq[3]
 set_property -dict { PACKAGE_PIN L13   IOSTANDARD LVCMOS33 } [get_ports o_flash_cs_n];
 
+set_property -dict { PACKAGE_PIN F14   IOSTANDARD LVCMOS33 } [get_ports o_accel_mosi];
+set_property -dict { PACKAGE_PIN E15   IOSTANDARD LVCMOS33 } [get_ports i_accel_miso];
+set_property -dict { PACKAGE_PIN D15   IOSTANDARD LVCMOS33 } [get_ports o_accel_cs_n];
+set_property -dict { PACKAGE_PIN F15   IOSTANDARD LVCMOS33 } [get_ports o_accel_sclk];
+
 set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { i_sw[0] }]
 set_property -dict { PACKAGE_PIN L16   IOSTANDARD LVCMOS33 } [get_ports { i_sw[1] }]
 set_property -dict { PACKAGE_PIN M13   IOSTANDARD LVCMOS33 } [get_ports { i_sw[2] }]

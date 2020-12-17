@@ -43,6 +43,10 @@ module swervolf_nexys_a7
     output wire        o_flash_cs_n,
     output wire        o_flash_mosi,
     input wire 	       i_flash_miso,
+    output wire        o_accel_cs_n,
+    output wire        o_accel_mosi,
+    input wire         i_accel_miso,
+    output wire        o_accel_sclk,
     input wire 	       i_uart_rx,
     output wire        o_uart_tx,
     input wire [15:0]  i_sw,
@@ -102,7 +106,8 @@ module swervolf_nexys_a7
      #(.ID_WIDTH (6))
    ddr2
      (.serial_tx   (litedram_tx),
-      .serial_rx   (i_uart_rx),
+//      .serial_rx   (i_uart_rx),
+      .serial_rx   (1),
       .clk100      (clk),
       .rst_n       (rstn),
       .pll_locked  (),
@@ -209,6 +214,10 @@ module swervolf_nexys_a7
       .o_flash_cs_n   (o_flash_cs_n),
       .o_flash_mosi   (o_flash_mosi),
       .i_flash_miso   (i_flash_miso),
+      .o_accel_sclk   (o_accel_sclk),
+      .o_accel_cs_n   (o_accel_cs_n),
+      .o_accel_mosi   (o_accel_mosi),
+      .i_accel_miso   (i_accel_miso),
       .i_uart_rx      (i_uart_rx),
       .o_uart_tx      (cpu_tx),
       .o_ram_awid     (cpu.aw_id),
@@ -262,6 +271,8 @@ module swervolf_nexys_a7
       sw_2r <= sw_r;
    end
 
-   assign o_uart_tx = sw_2r[0] ? litedram_tx : cpu_tx;
+//   assign o_uart_tx = sw_2r[0] ? litedram_tx : cpu_tx;
+  assign o_uart_tx = sw_2r[0] ? cpu_tx : cpu_tx;
+
 
 endmodule

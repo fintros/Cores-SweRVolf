@@ -129,7 +129,7 @@ generate:
     parameters:
       masters:
         io:
-          slaves : [rom, sys, spi_flash, uart]
+          slaves : [rom, sys, spi_flash, spi_accel, uart]
       slaves:
         rom:
           offset : 0x00000000
@@ -139,6 +139,9 @@ generate:
           size   : 0x00000040
         spi_flash:
           offset : 0x00001040
+          size   : 0x00000040
+        spi_accel:
+          offset : 0x00001080
           size   : 0x00000040
         uart:
           offset : 0x00002000
