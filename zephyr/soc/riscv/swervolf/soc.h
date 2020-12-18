@@ -19,7 +19,7 @@
 #define RISCV_MTIMECMP_BASE          0x80001028
 
 /* lib-c hooks required RAM defined variables */
-#define RISCV_RAM_BASE               CONFIG_SRAM_BASE_ADDRESS
-#define RISCV_RAM_SIZE               KB(CONFIG_SRAM_SIZE)
+#define RISCV_RAM_BASE               DT_SRAM_BASE_ADDRESS
+#define RISCV_RAM_SIZE               KB(DT_SRAM_SIZE)
 
 #endif /* __RISCV32_SERV_SOC_H_ */
