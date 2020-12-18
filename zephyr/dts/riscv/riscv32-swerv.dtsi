@@ -55,5 +55,15 @@
 			#address-cells = <1>;
 			#size-cells = <0>;
 		};
+
+		spi1: spi@80001080 {
+		    compatible = "opencores,spi-simple";
+		    reg = <0x80001080 0x40>;
+		    reg-names = "control";
+		    label = "SPI1";
+		    #address-cells = <1>;
+		    #size-cells = <0>;
+		    status = "disabled";
+		};
 	};
 };

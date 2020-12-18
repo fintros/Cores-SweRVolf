@@ -36,6 +36,10 @@ module swervolf_core
     output wire        o_flash_cs_n,
     output wire        o_flash_mosi,
     input wire 	       i_flash_miso,
+    output wire        o_accel_sclk,
+    output wire        o_accel_cs_n,
+    output wire        o_accel_mosi,
+    input wire         i_accel_miso,
     input wire 	       i_uart_rx,
     output wire        o_uart_tx,
     output wire [5:0]  o_ram_awid,
@@ -88,6 +92,7 @@ module swervolf_core
    wire        timer_irq;
    wire        uart_irq;
    wire        spi0_irq;
+   wire        spi2_irq;
    wire        sw_irq4;
    wire        sw_irq3;
    wire        nmi_int;
@@ -302,6 +307,54 @@ module swervolf_core
 
    assign wb_s2m_spi_flash_err = 1'b0;
    assign wb_s2m_spi_flash_rty = 1'b0;
+
+   wire [7:0]                spi2_rdt;
+   assign wb_s2m_spi_accel_dat = {24'd0,spi2_rdt};
+
+      reg resetter = 0;
+      reg [31:0] rst_cnt = 0;
+      always @(posedge clk)
+      begin
+         if ((rst_n == 0) || (i_ram_init_done == 0)) 
+         begin
+              rst_cnt <= 0;
+              resetter <= 1;
+         end else begin
+            if (rst_cnt == 32'hffffffff)
+                resetter <= 0;
+            else begin
+                rst_cnt <= rst_cnt + 1;
+                resetter <= 1;
+            end
+        
+         end
+     
+      end
+
+   simple_spi spi2
+     (// Wishbone slave interface
+      .clk_i  (clk),
+      .rst_i  (wb_rst),
+//     .rst_i  (resetter),
+
+      .adr_i  (wb_m2s_spi_accel_adr[2] ? 3'd0 : wb_m2s_spi_accel_adr[5:3]),
+      .dat_i  (wb_m2s_spi_accel_dat[7:0]),
+      .we_i   (wb_m2s_spi_accel_we),
+      .cyc_i  (wb_m2s_spi_accel_cyc),
+      .stb_i  (wb_m2s_spi_accel_stb),
+      .dat_o  (spi2_rdt),
+      .ack_o  (wb_s2m_spi_accel_ack),
+      .inta_o (spi2_irq),
+      // SPI interface
+      .sck_o  (o_accel_sclk),
+      .ss_o   (o_accel_cs_n),
+      .mosi_o (o_accel_mosi),
+      .miso_i (i_accel_miso));
+
+  assign wb_s2m_spi_accel_err = 1'b0;
+   assign wb_s2m_spi_accel_rty = 1'b0;
+
+
 
    wire [7:0] 		       uart_rdt;
    assign wb_s2m_uart_dat = {24'd0, uart_rdt};
@@ -527,7 +580,7 @@ module swervolf_core
       .dma_bus_clk_en (1'b1),
 
       .timer_int (timer_irq),
-      .extintsrc_req ({4'd0, sw_irq4, sw_irq3, spi0_irq, uart_irq}),
+      .extintsrc_req ({4'd0, sw_irq4, sw_irq3/*spi2_irq*/, spi0_irq, uart_irq}),
 
       .dec_tlu_perfcnt0 (),
       .dec_tlu_perfcnt1 (),

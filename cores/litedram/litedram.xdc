@@ -199,7 +199,7 @@ set_property LOC K6 [get_ports ddram_cs_n]
 set_property SLEW FAST [get_ports ddram_cs_n]
 set_property IOSTANDARD SSTL18_II [get_ports ddram_cs_n]
 
-set_property INTERNAL_VREF 0.9 [get_iobanks 34]
+set_property INTERNAL_VREF 0.750 [get_iobanks 34]
 
 #create_clock -name clk100 -period 10.0 [get_nets clk100]
 
